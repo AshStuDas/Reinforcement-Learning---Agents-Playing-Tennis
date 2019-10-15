@@ -11,7 +11,6 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class MultiAgent:
     def __init__(self, state_size, action_size, random_seed, num_agents):
-#         super(MultiAgent, self).__init__()
 
         self.params = constParams()
         
@@ -40,9 +39,6 @@ class MultiAgent:
         if (self.t_step == 0) and (len(self.memory) > self.params.batch_size):   
             for agent in self.ddpg_agents:
                 experiences = self.memory.sample() 
-#                 print('experiences=', experiences)
-#                 print('gamm=',self.params.gamma)
-#                 print('i=', i)
                 agent.learn(experiences, self.params.gamma)
         
         
