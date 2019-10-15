@@ -29,7 +29,6 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(random_seed)
-#         self.seed = torch.manual_seed(self.params.random_seed)
         self.memory = memory
 
         # Actor Network (w/ Target Network)
@@ -45,18 +44,6 @@ class Agent():
         # Noise process
         self.noise = OUNoise(action_size, random_seed, mu = self.params.ou_mu, theta = self.params.ou_theta, sigma = self.params.ou_sigma)
 
-        # Replay memory
-#         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
-    
-#     def step(self, state, action, reward, next_state, done):
-#         """Save experience in replay memory, and use random sample from buffer to learn."""
-#         # Save experience / reward
-#         self.memory.add(state, action, reward, next_state, done)
-
-#         # Learn, if enough samples are available in memory
-#         if len(self.memory) > BATCH_SIZE:
-#             experiences = self.memory.sample()
-#             self.learn(experiences, GAMMA)
 
     def act(self, state, epsilon, add_noise=True):
         """Returns actions for given state as per current policy."""
@@ -68,7 +55,6 @@ class Agent():
         if add_noise:
             action += epsilon * self.noise.sample()
         return np.clip(action, -1, 1)
-#         return action # play with this
 
     def reset(self):
         self.noise.reset()
@@ -109,7 +95,7 @@ class Agent():
         # Minimize the loss
         self.actor_optimizer.zero_grad()
         actor_loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.actor_local.parameters(), 1) # play with this
+#         torch.nn.utils.clip_grad_norm_(self.actor_local.parameters(), 1) # play with this
         self.actor_optimizer.step()
 
         # ----------------------- update target networks ----------------------- #
@@ -137,7 +123,6 @@ class OUNoise:
         self.mu = mu * np.ones(size)
         self.theta = theta
         self.sigma = sigma
-#         self.seed = random.seed(seed)
         self.seed = torch.manual_seed(seed)
         self.reset()
 
